@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Griffin Code Challenge</title>
+
+    <style type ="text/css" media ="all">
+      th{
+        padding:10px;
+      }
+      tbody tr:nth-child(odd){
+        background-color: #ccc;
+      }
+      button:hover{
+        background-color:blue;
+        color:white;
+      }
+    </style>
+
+    <script type="text/javascript">
+      function addItem() {
+        var productId = document.getElementById('product_id').value;
+        var quantity = document.getElementById('quantity').value;
+        var price = document.getElementById('price').value;
+        var discount = getDiscount(quantity);
+        var total = quantity*price;
+        var discountedTotal = total-discount;
+
+        var grandTotal = parseInt(document.getElementById("grand_total").innerText);
+        var grandDiscount = parseInt(document.getElementById("grand_discount").innerText);
+        var grandDiscountedTotal = parseInt(document.getElementById("grand_discounted_total").innerText);
+
+        var result_row = `<td>${productId}</td><td>${quantity}</td><td>${price}</td><td>${total}</td>`;
+        var discountHtml = `<td>${discount}</td>`;
+        var discountedTotalHtml = `<td>${discountedTotal.toFixed(2)}</td>`;
+
+        if (isNaN(parseInt(quantity)) || isNaN(parseInt(price))) {
+          alert("Quantity and price should be Numbers!");
+        }
+        else{
+          document.getElementsByTagName('table')[0].style.removeProperty('display');
+          document.getElementsByClassName('placeholder')[0].style.display = 'none';
+
+          document.getElementById("tbody").innerHTML += result_row+discountHtml+discountedTotalHtml;
+          document.getElementById("grand_total").innerText = grandTotal+total;
+          document.getElementById("grand_discount").innerText = grandDiscount+parseFloat(discount);
+          document.getElementById("grand_discounted_total").innerText = grandDiscountedTotal+discountedTotal;
+
+          document.getElementById('product_id').value = '';
+          document.getElementById('quantity').value = '';
+          document.getElementById('price').value = '';
+        }
+      }
+
+      function getDiscount(quantity){
+        var discount;
+        if (quantity<10) {
+          discount = quantity*0;
+        }
+        else if (10<=quantity<25) {
+          discount = quantity*0.1;
+        }
+        else if (25<quantity<50) {
+          discount = quantity*0.25;
+        }
+        else if (quantity>50) {
+          discount = quantity*0.5;
+        }
+        return discount.toFixed(2);
+      }
+
+    </script>
+
+  </head>
+  <body>
+    <h3>Enter product details below:</h3>
+    <input type="text" id="product_id" placeholder="Enter Product Id">
+    <input type="number" id="quantity" placeholder="Enter Quantity">
+    <input type="number" id="price" placeholder="Enter Price">
+    <button type="button" name="button" onclick="addItem()">Add Item</button>
+    <br><br>
+
+    <div class="placeholder">
+      <p>Enter product details to display totals...</p>
+    </div>
+
+    <table style="border: 1px solid black;display:none;" rules="all">
+      <thead>
+        <tr style="border-spacing:5px">
+          <th>Product Id</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Total</th>
+          <th>Discount</th>
+          <th>Discounted Total</th>
+        <tr>
+      </thead>
+      <tbody id="tbody" style="text-align:right">
+        <!-- contennt to be added dynamically by javascript -->
+      </tbody>
+      <tfoot>
+        <tr style="text-align:right; background-color:#fff; font-weight:bold">
+          <td colspan="3" style="text-align:center"><b>Grand Total:</b></td>
+          <td id="grand_total">0</td>
+          <td id="grand_discount">0</td>
+          <td id="grand_discounted_total">0</td>
+        </tr>
+      </tfoot>
+    </table>
+
+  </body>
+</html>
